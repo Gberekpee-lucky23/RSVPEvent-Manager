@@ -17,6 +17,7 @@ import { useEffect, useState } from "react"
 import { checkSupabaseConnection } from "./lib/supabase"
 import { Loader2 } from "lucide-react"
 import ForgotPassword from "./pages/ForgetPassword"
+import UpdatePassword from "./pages/UpdatePassword"
 
 function App() {
   const [connectionChecked, setConnectionChecked] = useState(false)
@@ -90,6 +91,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/rsvp/:eventId" element={<RsvpPage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/update-password" element={<UpdatePassword />} />
 
           {/* Protected routes */}
           <Route element={<ProtectedRoute />}>

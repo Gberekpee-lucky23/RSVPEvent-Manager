@@ -33,7 +33,7 @@ export default function ForgotPassword() {
         setError(null)
 
         const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
-           redirectTo: "https://rsvpe.netlify.app/update-password", // Update this to your password update route
+           redirectTo: "http://localhost:5173/update-password", // Update this to your password update route
         })
 
         if (error) {
