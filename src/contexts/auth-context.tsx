@@ -151,7 +151,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const signIn = async (email: string, password: string) => {
     try {
       console.log("Attempting to sign in with email:", email)
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+      const {error } = await supabase.auth.signInWithPassword({ email, password })
 
       if (error) {
         console.error("Sign in error:", error)
@@ -169,7 +169,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const signUp = async (email: string, password: string) => {
     try {
       console.log("Attempting to sign up with email:", email)
-      const { data, error } = await supabase.auth.signUp({
+      const {error } = await supabase.auth.signUp({
         email,
         password,
       })

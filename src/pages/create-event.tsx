@@ -63,7 +63,7 @@ export default function CreateEvent() {
 
       // Use RPC to create the event through a stored procedure
       // This bypasses the foreign key constraint issue by using server-side logic
-      const { data: eventData, error: eventError } = await supabase.rpc("create_event", {
+      const { error: eventError } = await supabase.rpc("create_event", {
         p_title: data.title,
         p_description: data.description,
         p_date: data.date,
@@ -76,7 +76,7 @@ export default function CreateEvent() {
         console.error("Error creating event:", eventError)
 
         // If the RPC fails, try the direct approach as a fallback
-        const { data: directEventData, error: directEventError } = await supabase
+        const {  error: directEventError } = await supabase
           .from("events")
           .insert([
             {
