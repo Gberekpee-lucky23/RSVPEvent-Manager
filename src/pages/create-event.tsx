@@ -15,19 +15,28 @@ import { supabase } from "../lib/supabase"
 import { Loader2 } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
 
+// Define the schema with proper types
 const eventSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
   date: z.string().min(1, { message: "Date is required" }),
   time: z.string().min(1, { message: "Time is required" }),
   location: z.string().min(1, { message: "Location is required" }),
   description: z.string().min(1, { message: "Description is required" }),
-  max_attendees: z
-    .string()
-    .optional()
-    .transform((val) => (val === "" ? null : Number.parseInt(val, 10))),
+  max_attendees: z.string().optional(),
 })
 
+// Define the form values type
 type EventFormValues = z.infer<typeof eventSchema>
+
+// Define the processed form data type after transformation
+type ProcessedEventData = {
+  title: string
+  date: string
+  time: string
+  location: string
+  description: string
+  max_attendees: number | null
+}
 
 export default function CreateEvent() {
   const navigate = useNavigate()
@@ -43,11 +52,23 @@ export default function CreateEvent() {
     resolver: zodResolver(eventSchema),
   })
 
-  const onSubmit = async (data: EventFormValues) => {
+  // Process the form data before submission
+  const processFormData = (data: EventFormValues): ProcessedEventData => {
+    return {
+      ...data,
+      max_attendees:
+        data.max_attendees === "" || data.max_attendees === undefined ? null : Number.parseInt(data.max_attendees, 10),
+    }
+  }
+
+  const onSubmit = async (formData: EventFormValues) => {
     setIsLoading(true)
     setError(null)
 
     try {
+      // Process the form data
+      const data = processFormData(formData)
+
       // Get the current user directly from Supabase
       const { data: authData, error: authError } = await supabase.auth.getUser()
 
@@ -62,7 +83,6 @@ export default function CreateEvent() {
       console.log("Creating event with user ID:", userId)
 
       // Use RPC to create the event through a stored procedure
-      // This bypasses the foreign key constraint issue by using server-side logic
       const { error: eventError } = await supabase.rpc("create_event", {
         p_title: data.title,
         p_description: data.description,
@@ -76,7 +96,7 @@ export default function CreateEvent() {
         console.error("Error creating event:", eventError)
 
         // If the RPC fails, try the direct approach as a fallback
-        const {  error: directEventError } = await supabase
+        const { error: directEventError } = await supabase
           .from("events")
           .insert([
             {
