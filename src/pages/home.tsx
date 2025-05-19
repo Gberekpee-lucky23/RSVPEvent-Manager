@@ -30,7 +30,7 @@ export default function Home() {
                 <div className="max-w-xl space-y-6">
                     <h2 className="text-4xl md:text-5xl font-extrabold text-[#5e60ce]">Plan. Invite. Manage.</h2>
                     <p className="text-lg text-gray-700">
-                        EventEase helps you seamlessly manage your events — from creating invitations to tracking RSVPs.
+                        RSVPE helps you seamlessly manage your events — from creating invitations to tracking RSVPs.
                         Whether it's a wedding, party, or corporate event, we've got you covered.
                     </p>
                     <div className="space-x-4 mt-8">
