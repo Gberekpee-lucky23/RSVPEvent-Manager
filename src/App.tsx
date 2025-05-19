@@ -18,6 +18,7 @@ import { checkSupabaseConnection } from "./lib/supabase"
 import { Loader2 } from "lucide-react"
 import ForgotPassword from "./pages/ForgetPassword"
 import UpdatePassword from "./pages/UpdatePassword"
+import Home from "./pages/home"
 
 function App() {
   const [connectionChecked, setConnectionChecked] = useState(false)
@@ -103,7 +104,7 @@ function App() {
           </Route>
 
           {/* Redirect routes */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/" element={<Home />} />
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
         <Toaster />

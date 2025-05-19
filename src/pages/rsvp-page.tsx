@@ -15,6 +15,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Calendar, Clock, MapPin, Users, Loader2, CheckCircle2 } from "lucide-react"
 import { supabase, type Event } from "../lib/supabase"
 import { formatDate } from "../lib/utils"
+import { Controller } from "react-hook-form"
 
 const rsvpSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
@@ -39,6 +40,7 @@ export default function RsvpPage() {
   const {
     register,
     handleSubmit,
+    control, // add this
     formState: { errors },
     watch,
   } = useForm<RsvpFormValues>({
@@ -271,25 +273,33 @@ export default function RsvpPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-[#5e69ce]">Email</Label>
-                <Input id="email" type="email" placeholder="john@example.com" {...register("email")}  className="border-gray-200"/>
+                <Input id="email" type="email" placeholder="john@example.com" {...register("email")} className="border-gray-200" />
                 {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
               </div>
               <div className="space-y-2">
                 <Label className="text-[#5e69ce]">Will you attend?</Label>
-                <RadioGroup defaultValue="accepted" {...register("status")}>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="accepted" id="accepted" />
-                    <Label htmlFor="accepted" className="cursor-pointer">
-                      Yes, I'll be there
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="declined" id="declined" />
-                    <Label htmlFor="declined" className="cursor-pointer">
-                      No, I can't make it
-                    </Label>
-                  </div>
-                </RadioGroup>
+                <Controller
+                  name="status"
+                  control={control}
+                  defaultValue="accepted"
+                  render={({ field }) => (
+                    <RadioGroup onValueChange={field.onChange} value={field.value}>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="accepted" id="accepted" />
+                        <Label htmlFor="accepted" className="cursor-pointer">
+                          Yes, I'll be there
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="declined" id="declined" />
+                        <Label htmlFor="declined" className="cursor-pointer">
+                          No, I can't make it
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                  )}
+                />
+
                 {errors.status && <p className="text-sm text-destructive">{errors.status.message}</p>}
               </div>
               <div className="space-y-2">
